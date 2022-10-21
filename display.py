@@ -1,7 +1,9 @@
 from picographics import PicoGraphics, DISPLAY_PICO_DISPLAY, PEN_P4
 from pimoroni import RGBLED
 
-_DISPLAY = PicoGraphics(display=DISPLAY_PICO_DISPLAY, rotate=0, pen_type=PEN_P4)
+from ui import Chart
+
+_DISPLAY = PicoGraphics(display=DISPLAY_PICO_DISPLAY, rotate=180, pen_type=PEN_P4)
 
 WHITE = _DISPLAY.create_pen(255, 255, 255)
 RED   = _DISPLAY.create_pen(255, 0, 0)
@@ -15,6 +17,7 @@ _LED = RGBLED(6, 7, 8)
 
 class Display:
     def __init__(self):
+        self.chart = Chart(display_height=135)
         _DISPLAY.set_backlight(0.5)
         _DISPLAY.set_font('sans')
     
@@ -36,17 +39,35 @@ class Display:
     def warn(self, msg):
         self.text(msg, color=YELLOW)
 
+    def _column_color(self, height):
+        if height < 31:
+            return RED
+        else:
+            return GREEN
+
     def _refresh_led(self, renewables):
         if renewables < 50:
-            _LED.set_rgb(255, 0, 0)
+            _LED.set_rgb(55, 0, 0)
         else:
-            _LED.set_rgb(0, 255, 0)
+            _LED.set_rgb(0, 55, 0)
 
-    def intensity(self, int):
-        print(int) # show on console
-        self.clear()
+    def _draw_values(self, intensity):
         _DISPLAY.set_pen(WHITE)
-        _DISPLAY.text(f'{int.value} g/kWh', 2, 16, 240, 1)
-        _DISPLAY.text(f'{int.renewables} %', 2, 56, 240, 1)
-        self._refresh_led(int.renewables)
+        _DISPLAY.text(f'{intensity.value} g/kWh', 2, 16, 240, 1)
+        _DISPLAY.text(f'{intensity.renewables} %', 2, 56, 240, 1)
+
+    def _draw_chart(self, renewables):
+        _DISPLAY.set_pen(WHITE)
+        _DISPLAY.line(0, 72, 250, 72)
+        self.chart.add(renewables)
+        for (x, y, w, h) in self.chart.render():
+            _DISPLAY.set_pen(self._column_color(h))
+            _DISPLAY.rectangle(x, y, w, h)
+
+    def intensity(self, intensity):
+        print(intensity) # show on console
+        self.clear()
+        self._draw_values(intensity)
+        self._draw_chart(intensity.renewables)
+        self._refresh_led(intensity.renewables)
         _DISPLAY.update()

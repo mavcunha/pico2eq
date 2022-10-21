@@ -1,1 +1,4 @@
+# configuration containers sensitive information
 config.json
+
+__pycache__

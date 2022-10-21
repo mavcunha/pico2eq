@@ -33,6 +33,7 @@ def main():
             except ValueError as e:
                 print(e)
                 display.error('updating...failed')
+                wait(10) # wait 10 seconds before retry
         else:
             try:
                 display.warn('connecting...')
