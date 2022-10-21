@@ -32,14 +32,14 @@ def main():
                 wait(300) # wait 5 min
             except ValueError as e:
                 print(e)
-                display.error(e)
+                display.error('updating...failed')
         else:
             try:
                 display.warn('connecting...')
                 wifi.connect()
             except RuntimeError as e:
                 print(e)
-                display.error(e)
+                display.error('connecting...failed')
 
 
 if __name__ == '__main__':

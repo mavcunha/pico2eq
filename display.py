@@ -24,6 +24,7 @@ class Display:
         _DISPLAY.update()
 
     def text(self, msg, color=WHITE):
+        print(msg) # show on console too
         self.clear()
         _DISPLAY.set_pen(color)
         _DISPLAY.text(msg, 2, 20, 240, 1)
@@ -42,6 +43,7 @@ class Display:
             _LED.set_rgb(0, 255, 0)
 
     def intensity(self, int):
+        print(int) # show on console
         self.clear()
         _DISPLAY.set_pen(WHITE)
         _DISPLAY.text(f'{int.value} g/kWh', 2, 16, 240, 1)

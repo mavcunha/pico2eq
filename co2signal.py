@@ -28,3 +28,6 @@ class Intensity:
         self.unit = unit
         self.fossil = percentage
         self.renewables = 100 - self.fossil
+
+    def __repr__(self):
+        return f'Intensity({self.value=},{self.unit=},{self.fossil=},{self.renewables=})'
