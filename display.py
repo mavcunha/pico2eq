@@ -18,6 +18,8 @@ _LED = RGBLED(6, 7, 8)
 class Display:
     def __init__(self):
         self.chart = Chart(display_height=135)
+        self.dot_on = False
+        _LED.set_rgb(0, 0, 0) # RGB led off
         _DISPLAY.set_backlight(0.5)
         _DISPLAY.set_font('sans')
     
@@ -39,6 +41,34 @@ class Display:
     def warn(self, msg):
         self.text(msg, color=YELLOW)
 
+    def dot(self, color):
+        _DISPLAY.set_pen(color)
+        _DISPLAY.circle(236,4,4)
+        _DISPLAY.update()
+
+    def blink_err(self):
+        self.blink_dot(RED)
+
+    def blink_warn(self):
+        self.blink_dot(YELLOW)
+
+    def dot_err(self):
+        self.dot(RED)
+
+    def dot_warn(self):
+        self.dot(YELLOW)
+
+    def dot_ok(self):
+        self.dot(GREEN)
+
+    def blink_dot(self, color=MAGENTA):
+        if self.dot_on: 
+            self.dot_on = False
+            self.dot(BLACK)
+        else:
+            self.dot_on = True
+            self.dot(color)
+        
     def _column_color(self, height):
         if height < 31:
             return RED
