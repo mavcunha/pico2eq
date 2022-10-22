@@ -3,7 +3,7 @@ from pimoroni import RGBLED
 
 from ui import Chart
 
-_DISPLAY = PicoGraphics(display=DISPLAY_PICO_DISPLAY, rotate=180, pen_type=PEN_P4)
+_DISPLAY = PicoGraphics(display=DISPLAY_PICO_DISPLAY, rotate=0, pen_type=PEN_P4)
 
 WHITE = _DISPLAY.create_pen(255, 255, 255)
 RED   = _DISPLAY.create_pen(255, 0, 0)
@@ -22,6 +22,7 @@ class Display:
         _LED.set_rgb(0, 0, 0) # RGB led off
         _DISPLAY.set_backlight(0.5)
         _DISPLAY.set_font('sans')
+        self.clear()
     
     def clear(self):
         _DISPLAY.set_pen(BLACK)
@@ -46,12 +47,6 @@ class Display:
         _DISPLAY.circle(236,4,4)
         _DISPLAY.update()
 
-    def blink_err(self):
-        self.blink_dot(RED)
-
-    def blink_warn(self):
-        self.blink_dot(YELLOW)
-
     def dot_err(self):
         self.dot(RED)
 
@@ -60,6 +55,12 @@ class Display:
 
     def dot_ok(self):
         self.dot(GREEN)
+
+    def blink_err(self):
+        self.blink_dot(RED)
+
+    def blink_warn(self):
+        self.blink_dot(YELLOW)
 
     def blink_dot(self, color=MAGENTA):
         if self.dot_on: 
