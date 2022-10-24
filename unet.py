@@ -15,11 +15,11 @@ class Wifi:
         while max_wait > 0:
             if self.wlan.status() < 0:
                 utils.blink(3)
-                raise RuntimeError('connection failed.')
+                raise RuntimeError(f'connection failed, status={self.wlan.status()}')
             elif self.wlan.status() >= 3:
                 break
             max_wait -= 1
-            print('waiting for connection...')
+            print(f'waiting for connection, status={self.wlan.status()}')
             utils.wait(1)
             
     def disconnect(self):
