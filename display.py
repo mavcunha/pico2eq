@@ -44,7 +44,7 @@ class Display:
 
     def dot(self, color):
         _DISPLAY.set_pen(color)
-        _DISPLAY.circle(236,4,4)
+        _DISPLAY.circle(235,5,4)
         _DISPLAY.update()
 
     def dot_err(self):
