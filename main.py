@@ -46,7 +46,8 @@ def main():
                 wifi.connect()
             except RuntimeError as e:
                 print(e)
-                display.error('connecting...err')
+                display.error('connecting...error')
+                wait(10, display.blink_err) # wait 10s before retry
 
 
 if __name__ == '__main__':
