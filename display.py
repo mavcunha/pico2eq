@@ -23,7 +23,7 @@ class Display:
         _DISPLAY.set_backlight(0.5)
         _DISPLAY.set_font('sans')
         self.clear()
-    
+
     def clear(self):
         _DISPLAY.set_pen(BLACK)
         _DISPLAY.clear()
@@ -33,7 +33,12 @@ class Display:
         print(msg) # show on console too
         self.clear()
         _DISPLAY.set_pen(color)
-        _DISPLAY.text(msg, 2, 20, 240, 1)
+        text_y_position = 20
+        if not isinstance(msg, list):
+            msg = [msg]
+        for t in msg:
+            _DISPLAY.text(t, 2, text_y_position, 240, 1)
+            text_y_position = text_y_position + 40 # next line
         _DISPLAY.update()
 
     def error(self, msg):
@@ -62,7 +67,7 @@ class Display:
     def blink_warn(self):
         self.blink_dot(YELLOW)
 
-    def blink_dot(self, color=MAGENTA):
+    def blink_dot(self, color=WHITE):
         if self.dot_on: 
             self.dot_on = False
             self.dot(BLACK)

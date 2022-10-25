@@ -7,27 +7,35 @@ class CO2Signal:
         self._headers = { 'auth-token': token }
         self._lon = lon
         self._lat = lat
+        self._last = None
 
-        
+
     def intensity(self):
         result = requests.get(f'{CO2SIGNAL_URL}?lon={self._lon}&lat={self._lat}',
                      headers = self._headers)
         if result.status_code == 200:
             json = result.json()
-            return Intensity(
-                json['data']['carbonIntensity'],
-                json['units']['carbonIntensity'],
-                json['data']['fossilFuelPercentage'])
+            self._last = Intensity(
+                intensity=json['data']['carbonIntensity'],
+                unit=json['units']['carbonIntensity'],
+                percentage=json['data']['fossilFuelPercentage'],
+                date=json['data']['datetime'])
+            return self._last
         else:
             raise ValueError(f'request failed status={result.status_code} reason={result.reason}')
-    
-    
+
+    def last_reading(self):
+        """last reading"""
+        return self._last
+
+
 class Intensity:
-    def __init__(self, intensity, unit, percentage):
+    def __init__(self, intensity, unit, percentage, date):
         self.value = intensity
         self.unit = unit
         self.fossil = percentage
         self.renewables = 100 - self.fossil
+        self.date = date
 
     def __repr__(self):
-        return f'Intensity({self.value=},{self.unit=},{self.fossil=},{self.renewables=})'
+        return f'Intensity({self.value=},{self.unit=},{self.fossil=},{self.renewables=},{self.date=})'
