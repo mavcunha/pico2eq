@@ -3,7 +3,7 @@ from config import Config
 from machine import Timer
 from display import Display
 from unet import Wifi
-from co2signal import CO2Signal, Intensity
+from co2signal import CO2Signal, Intensity, CO2Error
 from pimoroni import Button
 
 conf = Config.load('config-qcon.json')
@@ -17,6 +17,16 @@ display = Display()
 wifi = Wifi(conf.ssid, conf.pwd)
 co2s = CO2Signal(conf.token, conf.lon, conf.lat)
 
+def co2request(func):
+    """handle possible error on co2request"""
+    def inner(*args, **kwargs):
+        try:
+            func(*args, **kwargs)
+        except CO2Error as e:
+            print(e)
+            wait(10, display.blink_err) # wait 10s before retry
+    return inner
+
 
 def reset(timer):
     """causes pico to reset"""
@@ -24,6 +34,7 @@ def reset(timer):
         display.warn('reseting...')
         wait(1)
         machine.reset()
+
 
 def display_date(timer):
     """display date in the last reading"""
@@ -33,26 +44,25 @@ def display_date(timer):
         wait(2, display.blink_warn)
         display.intensity(last)
 
+
+@co2request
 def force_refresh(timer):
     """force refresh"""
     if button_x.read():
         display.warn('refreshing...')
-        intensity = co2s.intensity()
-        display.intensity(intensity)
+        display.intensity(co2s.intensity())
 
+
+@co2request
 def main():
     blink(2, short=1000) # 2 long = booting
     while True:
         if wifi.is_connected():
-            try:
-                blink(2, short=100) # 2 short updating
-                display.dot_warn()
-                intensity = co2s.intensity()
-                display.intensity(intensity)
-                wait(300, display.blink_dot) # wait 5 min
-            except ValueError as e:
-                print(e)
-                wait(10, display.blink_err) # wait 10s before retry
+            blink(2, short=100) # 2 short updating
+            display.dot_warn()
+            intensity = co2s.intensity()
+            display.intensity(intensity)
+            wait(300, display.blink_dot) # wait 5 min
         else:
             try:
                 display.warn('connecting...')
