@@ -2,9 +2,6 @@ import urequests as requests
 
 CO2SIGNAL_URL='http://api.co2signal.com/v1/latest'
 
-class CO2Error(Exception):
-    """raised when we fail to fetch data from co2signal"""
-
 class CO2Signal:
     def __init__(self, token, lon, lat):
         self._headers = { 'auth-token': token }
@@ -25,7 +22,7 @@ class CO2Signal:
                 date=json['data']['datetime'])
             return self._last
         else:
-            raise CO2Error(f'request failed status={result.status_code} reason={result.reason}')
+            raise ValueError(f'request failed status={result.status_code} reason={result.reason}')
 
     def last_reading(self):
         """last reading"""
