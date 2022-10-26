@@ -37,8 +37,13 @@ def force_refresh(timer):
     """force refresh"""
     if button_x.read():
         display.warn('refreshing...')
-        intensity = co2s.intensity()
-        display.intensity(intensity)
+        try:
+            intensity = co2s.intensity()
+            display.intensity(intensity)
+        except ValueError as e:
+            print(e)
+            wait(10, display.blink_err) # wait 10s before retry
+
 
 def main():
     blink(2, short=1000) # 2 long = booting
