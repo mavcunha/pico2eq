@@ -75,8 +75,8 @@ class Display:
             self.dot_on = True
             self.dot(color)
         
-    def _column_color(self, renewables):
-        if renewables < 50:
+    def _column_color(self, heigth):
+        if heigth < 32:
             return RED
         else:
             return GREEN
@@ -97,7 +97,7 @@ class Display:
         _DISPLAY.line(0, 72, 250, 72)
         self.chart.add(renewables)
         for (x, y, w, h) in self.chart.render():
-            _DISPLAY.set_pen(self._column_color(renewables))
+            _DISPLAY.set_pen(self._column_color(h))
             _DISPLAY.rectangle(x, y, w, h)
 
     def intensity(self, intensity):
