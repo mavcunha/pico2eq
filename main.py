@@ -6,7 +6,7 @@ from unet import Wifi
 from co2signal import CO2Signal, Intensity
 from pimoroni import Button
 
-conf = Config.load('config-qcon.json')
+conf = Config.load('config.json')
 
 button_a = Button(12)
 button_b = Button(13)

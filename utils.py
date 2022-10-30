@@ -7,9 +7,7 @@ LED = machine.Pin("LED", machine.Pin.OUT)
 
 def blink(times=3, short=100, long=0):
     for _ in range(times):
-        LED.on()
-        time.sleep_ms(short)
-        LED.off()
+        LED.toggle()
         time.sleep_ms(short)
     time.sleep(long)
 
