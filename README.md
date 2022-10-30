@@ -1,6 +1,5 @@
 ## Pico2eq - A carbon intensity monitor
 
-![](https://uat.marcovaltas.com/assets/img/posts/pico/pico_red.jpeg)
 ![](https://uat.marcovaltas.com/assets/img/posts/pico/pico_green.jpeg)
 
 This is a hack project to create a small Carbon Intensity Monitor using
