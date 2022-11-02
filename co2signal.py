@@ -14,7 +14,7 @@ class CO2Signal:
         result = requests.get(f'{CO2SIGNAL_URL}?lon={self._lon}&lat={self._lat}',
                      headers = self._headers)
         if result.status_code == 200:
-            json = result.json()
+            json = result.json() # implicitly closes socket
             self._last = Intensity(
                 intensity=json['data']['carbonIntensity'],
                 unit=json['units']['carbonIntensity'],
@@ -22,7 +22,9 @@ class CO2Signal:
                 date=json['data']['datetime'])
             return self._last
         else:
+            result.close() # we need to explicitly close socket
             raise ValueError(f'request failed status={result.status_code} reason={result.reason}')
+
 
     def last_reading(self):
         """last reading"""
